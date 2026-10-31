@@ -358,6 +358,7 @@ document.querySelectorAll('.chapter-body .prose-line').forEach(line => {
       });
     });
     formatBracketLabels(article);
+    window.ReaderUITemplate?.decorateChats?.(article);
     article.dataset.sfReady = 'true';
   }
   finish().catch(error=>console.warn('Reader presentation:',error));

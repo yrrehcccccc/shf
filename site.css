@@ -67,3 +67,15 @@ main{min-height:calc(100vh - 106px)}
 :is(.sf-price,.rt-price) :is(.rt-premium,.sf-premium){background:none;color:inherit;animation:none}
 
 .sf-bracket{font-weight:700}
+
+/* Existing read and time markers sit outside message text. */
+:is(.rt-chat,.sf-chat) .reader-message{display:grid;grid-template-columns:minmax(0,1fr);align-items:end;align-self:flex-start;width:fit-content;max-width:100%;min-width:0}
+:is(.rt-chat,.sf-chat) .reader-message-self{align-self:flex-end}
+:is(.rt-chat,.sf-chat) .reader-message-read{grid-template-columns:auto minmax(0,1fr);column-gap:7px}
+:is(.rt-chat,.sf-chat) .reader-message[data-chat-layout] > :is(.rt-bubble,.sf-bubble){grid-column:-2/-1;grid-row:2;justify-self:start;align-self:end;max-width:100%;min-width:0;margin:0;line-height:inherit}
+:is(.rt-chat,.sf-chat) .reader-message-self[data-chat-layout] > :is(.rt-bubble,.sf-bubble){justify-self:end}
+:is(.rt-chat,.sf-chat) .reader-message[data-chat-layout] > :is(.reader-chat-meta,.reader-chat-read){font:400 11px/1.35 system-ui,"PingFang SC","Microsoft YaHei",sans-serif;color:var(--muted,#77736c);letter-spacing:0;text-indent:0}
+:is(.rt-chat,.sf-chat) .reader-message[data-chat-layout] > .reader-chat-meta{grid-column:-2/-1;grid-row:1;margin:0 0 5px;white-space:normal;overflow-wrap:anywhere}
+:is(.rt-chat,.sf-chat) .reader-message[data-chat-layout] > .reader-chat-read{grid-column:1;grid-row:2;align-self:end;margin:0;padding-bottom:4px;white-space:nowrap}
+.sf-chat .sf-bubble:is(.rt-self,.sf-self){align-self:flex-end;background:#f8dce5;border-radius:16px 5px 16px 16px}
+.sf-chat .sf-bubble:is(.rt-self,.sf-self)::before{left:auto;right:-6px;border-width:4px 0 4px 7px;border-color:transparent transparent transparent #f8dce5}
