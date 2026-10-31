@@ -1,6 +1,6 @@
 /* Artwork coordinates use the supplied 1080 by 5000 reference canvas. */
 body.shf-home{position:relative;isolation:isolate;background:var(--bg);overscroll-behavior-y:none}
-.shf-home::before{content:"";position:absolute;z-index:0;top:0;bottom:0;left:50%;width:var(--shf-page-width);transform:translateX(-50%);pointer-events:none;background:#8b8c88 url("assets/shf-back.webp") center top/100% 100% no-repeat}
+.shf-home::before{content:"";position:fixed;z-index:0;top:0;left:50%;width:var(--shf-page-width);height:var(--shf-back-height,calc(100vw * 3500 / 1080));min-height:100lvh;transform:translate3d(-50%,var(--shf-back-y,0px),0);pointer-events:none;background:#8b8c88 url("assets/shf-back.webp") center top/cover no-repeat;will-change:transform}
 .shf-home .site-header{position:fixed;left:50%;transform:translateX(-50%);margin:0}
 .shf-home-main{position:relative;isolation:isolate;width:var(--shf-page-width);aspect-ratio:1080/5000;min-height:0;margin:0 auto;padding:0;overflow:hidden;line-height:1;letter-spacing:0;transition:opacity .52s ease}
 .shf-layer{position:absolute;display:block;margin:0;padding:0;border:0;line-height:0;background:none;text-decoration:none;-webkit-tap-highlight-color:transparent}
@@ -32,6 +32,7 @@ body.shf-home{position:relative;isolation:isolate;background:var(--bg);overscrol
 @media(prefers-reduced-motion:reduce){.shf-motion-ready .shf-opening,.shf-motion-ready .shf-reveal.is-visible,.shf-orbit>img{animation:none;opacity:1;transform:none;filter:none}.shf-motion-ready .shf-reveal{opacity:1}.shf-home-main,.shf-home::after{transition:none}}
 
 @media(min-width:641px){
-  .shf-home::before{left:0;width:100%;transform:none;background-image:url("assets/shf-back-desktop.jpg");background-position:center;background-size:cover}
+  .shf-home::before{left:0;width:100%;height:var(--shf-back-height,100lvh);transform:translate3d(0,var(--shf-back-y,0px),0);background-image:url("assets/shf-back-desktop.jpg");background-position:center;background-size:cover}
   .shf-home .site-header{left:0;transform:none}
 }
+@media(prefers-reduced-motion:reduce){.shf-home::before{will-change:auto}}

@@ -4,6 +4,7 @@
   if (!poster) return;
   const settings = document.querySelector('#settingsPanel');
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  const mobileLayout = matchMedia('(max-width:640px)');
   const reveal = [...poster.querySelectorAll('[data-reveal]')];
   if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver(entries => {
@@ -23,6 +24,28 @@
   let userScroll = false;
   let lastScroll = scrollY;
   let frame = 0;
+  let backgroundSpeed = 0;
+  function drawBackground() {
+    document.body.style.setProperty('--shf-back-y',(-Math.max(0,scrollY) * backgroundSpeed) + 'px');
+  }
+  function measureBackground() {
+    const travel = Math.max(0,document.documentElement.scrollHeight - innerHeight);
+    let height;
+    if (mobileLayout.matches) {
+      // Keep the supplied 1080 x 3500 sheet at its natural width-based height.
+      const naturalHeight = poster.clientWidth * 3500 / 1080;
+      height = Math.max(innerHeight,naturalHeight);
+      // Leave some of the pink end below the viewport; never reveal an empty edge.
+      const availableTravel = Math.max(0,height - innerHeight) * .85;
+      backgroundSpeed = reducedMotion.matches || !travel ? 0 : Math.min(.3,availableTravel / travel);
+    } else {
+      backgroundSpeed = reducedMotion.matches ? 0 : .3;
+      // Cover preserves the wide image's aspect ratio while allowing a slower pan.
+      height = innerHeight + travel * backgroundSpeed;
+    }
+    document.body.style.setProperty('--shf-back-height',height + 'px');
+    drawBackground();
+  }
   function atBottom() {
     return scrollY > 0 && document.documentElement.scrollHeight - innerHeight - scrollY <= 3;
   }
@@ -54,6 +77,7 @@
   }
   function checkScroll() {
     frame = 0;
+    drawBackground();
     if (scrollY < lastScroll || !atBottom()) cancelEntry();
     else queueEntry();
     lastScroll = scrollY;
@@ -61,6 +85,9 @@
   addEventListener('scroll',() => {
     if (!frame) frame = requestAnimationFrame(checkScroll);
   },{ passive:true });
+  addEventListener('resize',measureBackground,{ passive:true });
+  reducedMotion.addEventListener?.('change',measureBackground);
+  mobileLayout.addEventListener?.('change',measureBackground);
   addEventListener('wheel',event => {
     if (!poster.contains(event.target)) return;
     userScroll = true;
@@ -92,5 +119,7 @@
     cancelEntry();clearTimeout(navigationTimer);
     leaving = false;userScroll = false;lastScroll = scrollY;
     document.body.classList.remove('shf-leaving');
+    measureBackground();
   });
+  measureBackground();
 })();
