@@ -65,3 +65,5 @@ main{min-height:calc(100vh - 106px)}
 /* Keep the known impersonator plain in both reader components. */
 .sf-impersonator,.sf-impersonator :is(strong,b,.sf-official,.rt-official,[data-rt-user]){font-weight:var(--weight,400)}
 :is(.sf-price,.rt-price) :is(.rt-premium,.sf-premium){background:none;color:inherit;animation:none}
+
+.sf-bracket{font-weight:700}

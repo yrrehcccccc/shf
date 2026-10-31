@@ -233,6 +233,70 @@ document.querySelectorAll('.chapter-body .prose-line').forEach(line => {
     const bytes = await window.crypto.subtle.digest('SHA-256',new TextEncoder().encode(value));
     return [...new Uint8Array(bytes)].map(byte=>byte.toString(16).padStart(2,'0')).join('');
   };
+
+  function formatBracketLabels(container) {
+    const covered = new WeakSet();
+    const unitSelector = '.prose-line,p,summary,.rt-title';
+
+    function formatNodes(nodes) {
+      let offset = 0;
+      const records = nodes.map(node => {
+        covered.add(node);
+        const start = offset;
+        offset += node.data.length;
+        const parent = node.parentElement;
+        return {
+          node, start, end:offset,
+          skip:!parent || !!parent.closest('script,style,textarea,.sf-bracket') ||
+            Number.parseInt(getComputedStyle(parent).fontWeight,10) >= 700
+        };
+      });
+      const value = nodes.map(node=>node.data).join('');
+      const openings = [], pairs = [];
+      for (let i = 0; i < value.length; i++) {
+        if (value[i] === '【') openings.push(i);
+        else if (value[i] === '】' && openings.length) pairs.push({ start:openings.pop(), end:i + 1 });
+      }
+      const ranges = [];
+      pairs.sort((a,b)=>a.start-b.start || b.end-a.end).forEach(pair=>{
+        const previous = ranges.at(-1);
+        if (previous && pair.start < previous.end) previous.end = Math.max(previous.end,pair.end);
+        else ranges.push({ ...pair });
+      });
+      records.forEach(({ node,start,end,skip })=>{
+        if (skip) return;
+        const parts = ranges.filter(range=>range.start < end && range.end > start);
+        if (!parts.length) return;
+        const fragment = document.createDocumentFragment();
+        let cursor = 0;
+        parts.forEach(range=>{
+          const from = Math.max(start,range.start) - start;
+          const to = Math.min(end,range.end) - start;
+          if (from > cursor) fragment.append(document.createTextNode(node.data.slice(cursor,from)));
+          const emphasis = document.createElement(node.parentElement.closest('strong,b') ? 'span' : 'strong');
+          emphasis.className = 'sf-bracket';
+          emphasis.textContent = node.data.slice(from,to);
+          fragment.append(emphasis);
+          cursor = to;
+        });
+        if (cursor < node.data.length) fragment.append(document.createTextNode(node.data.slice(cursor)));
+        node.replaceWith(fragment);
+      });
+    }
+
+    const units = [...container.querySelectorAll(unitSelector)].filter(unit=>!unit.querySelector(unitSelector));
+    units.forEach(unit=>{
+      const walker = document.createTreeWalker(unit,NodeFilter.SHOW_TEXT);
+      const nodes = [];
+      while (walker.nextNode()) nodes.push(walker.currentNode);
+      formatNodes(nodes);
+    });
+    const walker = document.createTreeWalker(container,NodeFilter.SHOW_TEXT);
+    const remaining = [];
+    while (walker.nextNode()) if (!covered.has(walker.currentNode)) remaining.push(walker.currentNode);
+    remaining.forEach(node=>formatNodes([node]));
+  }
+
   async function finish() {
     const accepted = window.crypto?.subtle ? (await Promise.all(candidates.map(async range => {
       const excerpt = normalize(values.slice(range.start,range.end + 1));
@@ -293,6 +357,7 @@ document.querySelectorAll('.chapter-body .prose-line').forEach(line => {
         line.classList.add('sf-bubble');
       });
     });
+    formatBracketLabels(article);
     article.dataset.sfReady = 'true';
   }
   finish().catch(error=>console.warn('Reader presentation:',error));
