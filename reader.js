@@ -109,11 +109,17 @@ document.querySelectorAll('.chapter-body .prose-line').forEach(line => {
   lines.forEach(line => {
     const value = line.textContent;
     const meta = value.match(/^(#\d+\s+)(.+?)(\s*[|｜]\s*.+?\s*[|｜])(.*)$/u);
+    const impersonator = /^#173\s+BLACKHAND\s*[|｜]\s*07\/24\s+21:09\s*[|｜]\s*$/u.test(value.trim());
+    if (impersonator) {
+      line.querySelectorAll('strong,b,[data-rt-user],.sf-official,.rt-official').forEach(user => {
+        if (user.textContent.trim() === 'BLACKHAND') user.replaceWith(document.createTextNode(user.textContent));
+      });
+    }
     if (meta && !line.children.length) {
       const name = meta[2].trim();
       const code = meta[4].trim().split(/[▲▼]/u)[0].trim();
       const known = /^(?:MASTER|BLACKHAND|Gemini|ChatGPT|GPT|楼宝|🎂)$/iu.test(name);
-      const official = code ? name === code : known;
+      const official = !impersonator && (code ? name === code : known);
       const premium = name === 'NONONO';
       if (official || premium) {
         const user = document.createElement('strong');
