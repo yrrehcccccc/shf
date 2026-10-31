@@ -93,7 +93,10 @@ document.querySelectorAll('.chapter-body .prose-line').forEach(line => {
   const article = document.querySelector('.chapter-body');
   if (!article || article.dataset.sfEnhanced) return;
   article.dataset.sfEnhanced = 'true';
-  const lines = [...article.children];
+  const rowSelector = '.prose-line,.blank-line,p,.rt-title';
+  const lines = [...article.querySelectorAll(rowSelector)].filter(line =>
+    !line.querySelector(rowSelector) && !line.closest('details,.sf-chat,.rt-chat,.sf-review,.rt-review')
+  );
   const values = lines.map(line => line.textContent.trim());
   const text = i => values[i] ?? '';
   const blank = i => !text(i);
@@ -126,6 +129,7 @@ document.querySelectorAll('.chapter-body .prose-line').forEach(line => {
       line.replaceChildren(document.createTextNode('@'), user, document.createTextNode(value.slice(7)));
     }
     if (!/^(?:🙏|感谢)/u.test(value.trim()) || !/等\d[\d,，]*位善人/u.test(value)) return;
+    line.classList.add('sf-donation-row');
     const walker = document.createTreeWalker(line, NodeFilter.SHOW_TEXT);
     const nodes = [];
     while (walker.nextNode()) nodes.push(walker.currentNode);
@@ -224,9 +228,12 @@ document.querySelectorAll('.chapter-body .prose-line').forEach(line => {
       return approved[range.kind]?.includes(signature) ? range : null;
     }))).filter(Boolean) : [];
     accepted.push(...chatRanges);
-    accepted.sort((a,b)=>b.start-a.start).forEach(range => {
+    // Build outer excerpts first so inner disclosures can remain nested.
+    accepted.sort((a,b)=>a.start-b.start || b.displayEnd-a.displayEnd).forEach(range => {
       const selected = lines.slice(range.start,range.displayEnd + 1);
-      if (!selected.length || selected.some(line=>line.parentElement !== article)) return;
+      const parent = selected[0]?.parentElement;
+      if (!parent || !article.contains(parent) || selected.some(line=>line.parentElement !== parent)) return;
+      if (range.kind === 'forum' && selected[0].closest('.sf-forum,.rt-forum')) return;
       const block = document.createElement(range.kind === 'fold' ? 'details' : 'section');
       block.className = range.kind === 'chat' ? 'sf-chat' : 'sf-excerpt sf-' + range.kind;
       selected[0].before(block);

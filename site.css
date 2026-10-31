@@ -50,3 +50,14 @@ main{min-height:calc(100vh - 106px)}
 @keyframes sf-spectrum{to{background-position:200% 0}}
 @media(max-width:640px){.sf-excerpt{padding:15px 14px}.sf-fold{padding:0}.sf-chat{padding:12px}}
 @media(prefers-reduced-motion:reduce){.sf-premium{animation:none}}
+
+/* Forum rows have one blank line between them, independent of source spacers. */
+:is(.sf-excerpt.sf-forum,.rt-card.rt-forum) :is(p,.prose-line):not(.sf-divider){margin:0 0 1.7em;text-indent:0;line-height:1.7}
+:is(.sf-excerpt.sf-forum,.rt-card.rt-forum) :is(p,.prose-line):not(.sf-divider):last-child{margin-bottom:0}
+:is(.sf-excerpt.sf-forum,.rt-card.rt-forum) .blank-line{display:none}
+:is(.sf-excerpt.sf-forum,.rt-card.rt-forum) :is(.forum-title,.rt-title){font-size:calc(1em + 2px);font-weight:700}
+:is(.sf-excerpt.sf-forum,.rt-card.rt-forum) > .rt-title{margin-bottom:1.7em}
+:is(.sf-excerpt.sf-forum,.rt-card.rt-forum) .sf-donation-row:not(.sf-divider){margin-bottom:3.4em}
+:is(.sf-excerpt.sf-forum,.rt-card.rt-forum) .sf-fold{font-size:inherit;background:transparent}
+
+:is(.sf-excerpt.sf-forum,.rt-card.rt-forum) .rt-title .forum-title{font-size:inherit}
