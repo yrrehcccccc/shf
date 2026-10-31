@@ -1,6 +1,6 @@
 /* Artwork coordinates use the supplied 1080 by 5000 reference canvas. */
 body.shf-home{position:relative;isolation:isolate;background:var(--bg);overscroll-behavior-y:none}
-.shf-home::before{content:"";position:fixed;z-index:0;top:0;bottom:0;left:50%;width:var(--shf-page-width);transform:translateX(-50%);pointer-events:none;background:#8b8c88 url("assets/shf-back.webp") center var(--shf-header-height)/100% auto no-repeat}
+.shf-home::before{content:"";position:fixed;z-index:0;top:0;bottom:0;left:50%;width:var(--shf-page-width);transform:translateX(-50%);pointer-events:none;background:#8b8c88 url("assets/shf-back.webp") center calc(var(--shf-header-height) * 138 / 236)/100% auto no-repeat}
 .shf-home .site-header{position:fixed;left:50%;transform:translateX(-50%);margin:0}
 .shf-home-main{position:relative;isolation:isolate;width:var(--shf-page-width);aspect-ratio:1080/5000;min-height:0;margin:0 auto;padding:0;overflow:hidden;line-height:1;letter-spacing:0;transition:opacity .52s ease}
 .shf-layer{position:absolute;display:block;margin:0;padding:0;border:0;line-height:0;background:none;text-decoration:none;-webkit-tap-highlight-color:transparent}
