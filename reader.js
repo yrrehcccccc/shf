@@ -159,7 +159,7 @@ document.querySelectorAll('.chapter-body .prose-line').forEach(line => {
     });
   });
 
-  const approved = {"forum":["11e1a14bb1a9283cf9b0b94438b7a4df8eb75e3d338ec2ab0fd021bc97c1f786"],"timeline":["8f7665f32c7bbf60b684d40c72cd60061a6c062c8e6967fb0e7fbd7146bfd785"],"price":["32d08393b85044c381a778fdee820ba477b55e30e589e05639755aa5a52f7d06"],"review":["56068b14a9c80521c089890199f3e546425969a821250f597b178422e776670f","fce22137d428fcc725aceb522c674cca186d2c7299b1c086f242e39100f7b48d","0a011b1d70ac60c6ae669ebd52e562d6624bab0137dc02a414da641a5ee1bb11","12ef6b02e055fd59f02e87a552450b0cd7c0f5502bc6d11759de69519258a827"],"fold":["2bb9fbc21d2e28275661ce5656c87ca0d5dc91764e23255d94fa313ad0c85670","921d5affc743fc457899e37797e2bcaae3b20a9c978bbb8f8948ca5d188293e1","fba5374f57f69f0f277cbea48f3f3725d676215be9052786a1d27c9da1230319","33eb5d91eea2a7b642a97c372528329b85e1897ad588ddaa325a7134129516f1","177876c1bcce6d377575f1132136d5eacb338a0ff4bc0a82ba7b25c9993fb18d","f5507a66a65e62a107249a8fd9a8bf21685fc8f9fceeb6fdaa1d338dd2175880","b1f6745f69793c2c4b8c3ba50e7adff03063ba64639962797195eace575af699","3d98af0de29e16d6e0c149b7b9d401ab26fa7f8d034b46ef1dfaa324f497b012","c07be9bd24d4e95ef51b7d4465d1222673743434783987c69407578339f4cfb6"]};
+  const approved = {"forum":["11e1a14bb1a9283cf9b0b94438b7a4df8eb75e3d338ec2ab0fd021bc97c1f786"],"timeline":["283f2d3698375c06d59bb48ddd2a6d8e6c89b3ecb71eb487d728ff9dbd209b1e"],"price":["32d08393b85044c381a778fdee820ba477b55e30e589e05639755aa5a52f7d06"],"review":["56068b14a9c80521c089890199f3e546425969a821250f597b178422e776670f","fce22137d428fcc725aceb522c674cca186d2c7299b1c086f242e39100f7b48d","0a011b1d70ac60c6ae669ebd52e562d6624bab0137dc02a414da641a5ee1bb11","12ef6b02e055fd59f02e87a552450b0cd7c0f5502bc6d11759de69519258a827"],"fold":["2bb9fbc21d2e28275661ce5656c87ca0d5dc91764e23255d94fa313ad0c85670","921d5affc743fc457899e37797e2bcaae3b20a9c978bbb8f8948ca5d188293e1","fba5374f57f69f0f277cbea48f3f3725d676215be9052786a1d27c9da1230319","33eb5d91eea2a7b642a97c372528329b85e1897ad588ddaa325a7134129516f1","177876c1bcce6d377575f1132136d5eacb338a0ff4bc0a82ba7b25c9993fb18d","f5507a66a65e62a107249a8fd9a8bf21685fc8f9fceeb6fdaa1d338dd2175880","b1f6745f69793c2c4b8c3ba50e7adff03063ba64639962797195eace575af699","3d98af0de29e16d6e0c149b7b9d401ab26fa7f8d034b46ef1dfaa324f497b012","c07be9bd24d4e95ef51b7d4465d1222673743434783987c69407578339f4cfb6"]};
   const candidates = [];
   const add = (kind, start, end, displayEnd = end) => candidates.push({ kind, start, end:trimEnd(start,end), displayEnd });
   lines.forEach((line, i) => {
@@ -175,7 +175,7 @@ document.querySelectorAll('.chapter-body .prose-line').forEach(line => {
       for (let j = start; j < lines.length; j++) {
         if (blank(j)) continue;
         // Source spacing is allowed inside a timeline; narrative ends it.
-        if (!/^(?:◎|【.+】[。.]?$)/u.test(text(j))) break;
+        if (!/^(?:◎|【.+】[。.]?$|\d{2}:\d{2}(?:-\d{2}:\d{2})?(?:\s|$))/u.test(text(j))) break;
         end = j;
       }
       add('timeline',start,end);
@@ -232,7 +232,8 @@ document.querySelectorAll('.chapter-body .prose-line').forEach(line => {
   };
   async function finish() {
     const accepted = window.crypto?.subtle ? (await Promise.all(candidates.map(async range => {
-      const signature = await digest(normalize(values.slice(range.start,range.end + 1)));
+      const excerpt = normalize(values.slice(range.start,range.end + 1));
+      const signature = await digest(range.kind === 'timeline' ? excerpt.replace(/[\s◎]/gu,'') : excerpt);
       return approved[range.kind]?.includes(signature) ? range : null;
     }))).filter(Boolean) : [];
     accepted.push(...chatRanges);
