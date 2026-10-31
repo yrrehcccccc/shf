@@ -61,3 +61,7 @@ main{min-height:calc(100vh - 106px)}
 :is(.sf-excerpt.sf-forum,.rt-card.rt-forum) .sf-fold{font-size:inherit;background:transparent}
 
 :is(.sf-excerpt.sf-forum,.rt-card.rt-forum) .rt-title .forum-title{font-size:inherit}
+
+/* Keep the known impersonator plain in both reader components. */
+.sf-impersonator,.sf-impersonator :is(strong,b,.sf-official,.rt-official,[data-rt-user]){font-weight:var(--weight,400)}
+:is(.sf-price,.rt-price) :is(.rt-premium,.sf-premium){background:none;color:inherit;animation:none}

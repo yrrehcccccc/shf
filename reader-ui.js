@@ -3,6 +3,17 @@
   'use strict';
   const officialNames = new Set(['master','blackhand','gemini','chatgpt','gpt','楼宝','🎂']);
 
+  function clearKnownImpersonator(container) {
+    container.querySelectorAll('.prose-line,p,.rt-meta').forEach(row => {
+      if (!/^#173\s+BLACKHAND\s*[|｜]\s*07\/24\s+21:09\s*[|｜]\s*$/u.test(row.textContent.trim())) return;
+      row.classList.add('sf-impersonator');
+      row.style.fontWeight = 'var(--weight,400)';
+      row.querySelectorAll('.sf-official,.rt-official').forEach(user => user.classList.remove('sf-official','rt-official'));
+      row.querySelectorAll('strong,b').forEach(user => user.replaceWith(...user.childNodes));
+      row.querySelectorAll('[data-rt-user]').forEach(user => { user.style.fontWeight = 'inherit'; });
+    });
+  }
+
   function init(container = document) {
     container.querySelectorAll('[data-rt-user]').forEach(user => {
       const name = user.textContent.trim();
@@ -36,6 +47,7 @@
         node.replaceWith(fragment);
       });
     });
+    clearKnownImpersonator(container);
   }
 
   window.ReaderUITemplate = Object.freeze({ init });
