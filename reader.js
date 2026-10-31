@@ -61,14 +61,14 @@ document.querySelectorAll('[data-size]').forEach(button => button.onclick = () =
   select('size', button.dataset.size);
   save('size', button.dataset.size);
 });
-if (read('defaults-version') !== '2') {
+if (read('defaults-version') !== '3') {
   // Move stored copies of the former defaults to the new defaults once.
-  if (read('theme') === null || read('theme') === '1') save('theme', 0);
-  if (read('font') === null || read('font') === 'serif') save('font', 'light');
-  save('defaults-version', '2');
+  if (read('theme') === null || read('theme') === '0') save('theme', 1);
+  if (read('font') === null) save('font', 'light');
+  save('defaults-version', '3');
 }
-const theme = Number(read('theme') ?? 0);
-document.querySelector('[data-theme="' + (Number.isInteger(theme) && themes[theme] ? theme : 0) + '"]').click();
+const theme = Number(read('theme') ?? 1);
+document.querySelector('[data-theme="' + (Number.isInteger(theme) && themes[theme] ? theme : 1) + '"]').click();
 const font = read('font');
 document.querySelector('[data-font="' + (Object.hasOwn(fonts, font) ? font : 'light') + '"]').click();
 const size = read('size');

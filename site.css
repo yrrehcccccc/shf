@@ -1,4 +1,4 @@
-:root{--bg:#f8f7f3;--ink:#171714;--body:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;--weight:300}
+:root{--bg:#eee8da;--ink:#332a22;--body:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;--weight:300}
 .forum-title{font-weight:700}
 .site-header{height:106px;z-index:40;background:color-mix(in srgb,var(--bg) 94%,transparent);border-bottom:1px solid var(--line);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
 .site-name{width:100%;height:54px;padding:16px 20px 0;text-align:center;font-family:var(--body);font-size:clamp(22px,3.6vw,30px);font-weight:400;line-height:1.3;letter-spacing:.12em;color:var(--ink);text-decoration:none}
@@ -105,4 +105,11 @@ body:not(.shf-home) main{min-height:calc(100vh - var(--shf-header-height))}
   .site-header .word-count{top:max(12px,1.58cqw);left:2cqw;right:auto;max-width:30%;padding:4px 7px;font-size:clamp(8px,.8cqw,11px)}
   .site-header .toolbar{top:max(14px,1.58cqw);right:2cqw}
   .site-header .toolbar .round{width:clamp(26px,2.9cqw,42px);height:clamp(26px,2.9cqw,42px)}
+}
+
+/* Match dream's mobile header anchors; fit the count into SHF's artwork. */
+@media(max-width:640px){
+  .site-header .word-count{top:6.1vw;left:2vw;right:auto;width:max-content;max-width:none;height:auto;min-height:0;margin:0;padding:3px 4px;font-size:clamp(5px,1.5vw,8px);line-height:1.15;transform:translateY(-50%)}
+  .site-header .toolbar{top:6.1vw;right:2vw;transform:translateY(-50%)}
+  .site-header .toolbar .round{width:clamp(24px,8vw,40px);height:clamp(24px,8vw,40px)}
 }
