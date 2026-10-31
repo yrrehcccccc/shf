@@ -102,7 +102,7 @@ body:not(.shf-home) main{min-height:calc(100vh - var(--shf-header-height))}
   :root{--shf-header-height:calc(100vw * 241 / 3840)}
   .site-header{width:100%;margin-inline:0}
   .site-header .site-name{aspect-ratio:3840/241;background-image:url("assets/shf-top-desktop.png")}
-  .site-header .word-count{top:1.58cqw;left:2cqw;right:auto;max-width:30%;padding:4px 7px;font-size:clamp(8px,.8cqw,11px)}
-  .site-header .toolbar{top:1.58cqw;right:2cqw}
+  .site-header .word-count{top:max(12px,1.58cqw);left:2cqw;right:auto;max-width:30%;padding:4px 7px;font-size:clamp(8px,.8cqw,11px)}
+  .site-header .toolbar{top:max(14px,1.58cqw);right:2cqw}
   .site-header .toolbar .round{width:clamp(26px,2.9cqw,42px);height:clamp(26px,2.9cqw,42px)}
 }
