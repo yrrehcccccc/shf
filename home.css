@@ -30,3 +30,8 @@ body.shf-home{position:relative;isolation:isolate;background:var(--bg);overscrol
 .shf-home.shf-leaving::after{opacity:1}
 .shf-home.shf-leaving .shf-home-main{opacity:0;pointer-events:none}
 @media(prefers-reduced-motion:reduce){.shf-motion-ready .shf-opening,.shf-motion-ready .shf-reveal.is-visible,.shf-orbit>img{animation:none;opacity:1;transform:none;filter:none}.shf-motion-ready .shf-reveal{opacity:1}.shf-home-main,.shf-home::after{transition:none}}
+
+@media(min-width:641px){
+  .shf-home::before{left:0;width:100%;transform:none;background-image:url("assets/shf-back-desktop.jpg");background-position:center;background-size:cover}
+  .shf-home .site-header{left:0;transform:none}
+}

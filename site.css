@@ -96,3 +96,13 @@ body:not(.shf-home) main{min-height:calc(100vh - var(--shf-header-height))}
 @keyframes shf-chapter-arrival{from{opacity:0}to{opacity:1}}
 @media(max-width:640px){:root{--shf-page-width:100%;--shf-header-height:calc(100vw * 236 / 1080)}}
 @media(prefers-reduced-motion:reduce){.shf-chapter-entry main{animation:none}}
+
+/* Wide artwork is used only by desktop readers. */
+@media(min-width:641px){
+  :root{--shf-header-height:calc(100vw * 241 / 3840)}
+  .site-header{width:100%;margin-inline:0}
+  .site-header .site-name{aspect-ratio:3840/241;background-image:url("assets/shf-top-desktop.png")}
+  .site-header .word-count{top:1.58cqw;left:2cqw;right:auto;max-width:30%;padding:4px 7px;font-size:clamp(8px,.8cqw,11px)}
+  .site-header .toolbar{top:1.58cqw;right:2cqw}
+  .site-header .toolbar .round{width:clamp(26px,2.9cqw,42px);height:clamp(26px,2.9cqw,42px)}
+}
