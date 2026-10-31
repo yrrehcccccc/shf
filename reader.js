@@ -52,12 +52,16 @@ document.querySelectorAll('[data-size]').forEach(button => button.onclick = () =
   select('size', button.dataset.size);
   save('size', button.dataset.size);
 });
-const savedTheme = read('theme');
-if (read('theme-default-version') !== '2') { if (savedTheme === null || savedTheme === '0') save('theme', 1); save('theme-default-version', '2'); }
-const theme = Number(read('theme') ?? 1);
-document.querySelector('[data-theme="' + (Number.isInteger(theme) && themes[theme] ? theme : 1) + '"]').click();
+if (read('defaults-version') !== '2') {
+  // Move stored copies of the former defaults to the new defaults once.
+  if (read('theme') === null || read('theme') === '1') save('theme', 0);
+  if (read('font') === null || read('font') === 'serif') save('font', 'light');
+  save('defaults-version', '2');
+}
+const theme = Number(read('theme') ?? 0);
+document.querySelector('[data-theme="' + (Number.isInteger(theme) && themes[theme] ? theme : 0) + '"]').click();
 const font = read('font');
-document.querySelector('[data-font="' + (Object.hasOwn(fonts, font) ? font : 'serif') + '"]').click();
+document.querySelector('[data-font="' + (Object.hasOwn(fonts, font) ? font : 'light') + '"]').click();
 const size = read('size');
 document.querySelector('[data-size="' + (['12','14','16','18','20','23'].includes(size) ? size : '16') + '"]').click();
 
@@ -72,3 +76,14 @@ document.querySelectorAll('.toc-dropdown').forEach(details=>{
 });
 document.addEventListener('click',event=>document.querySelectorAll('.toc-dropdown[open]').forEach(menu=>{if(!menu.contains(event.target))menu.open=false;}));
 document.addEventListener('keydown',event=>{if(event.key==='Escape')document.querySelectorAll('.toc-dropdown[open]').forEach(menu=>{menu.open=false;menu.querySelector('summary').focus();});});
+
+// Forum thread headings use a board badge; explanatory prose after a comma
+// and image placeholders are not headings. Keep all source text intact.
+const forumTitlePattern = /^\s*【(?:😼|🐶|📢)\uFE0F?】(?![，,])/u;
+document.querySelectorAll('.chapter-body .prose-line').forEach(line => {
+  if (!forumTitlePattern.test(line.textContent) || line.querySelector('.forum-title')) return;
+  const title = document.createElement('strong');
+  title.className = 'forum-title';
+  title.append(...line.childNodes);
+  line.append(title);
+});
