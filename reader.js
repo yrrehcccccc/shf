@@ -173,7 +173,9 @@ document.querySelectorAll('.chapter-body .prose-line').forEach(line => {
       const start = nextText(i + 1);
       let end = start;
       for (let j = start; j < lines.length; j++) {
-        if (blank(j) && blank(j + 1)) break;
+        if (blank(j)) continue;
+        // Source spacing is allowed inside a timeline; narrative ends it.
+        if (!/^(?:◎|【.+】[。.]?$)/u.test(text(j))) break;
         end = j;
       }
       add('timeline',start,end);
