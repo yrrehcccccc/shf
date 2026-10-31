@@ -82,3 +82,17 @@ main{min-height:calc(100vh - 106px)}
 
 /* A quiet divider marks existing settlement headings. */
 .chapter-body .reader-settlement{border-top:1px solid color-mix(in srgb,var(--ink) 12%,var(--bg));padding-top:1.2em;margin-top:1.6em}
+
+/* The shared artwork header replaces the former text-only site name. */
+:root{--shf-page-width:min(820px,calc(100vw - 44px));--shf-header-height:calc(var(--shf-page-width) * 236 / 1080)}
+.site-header{width:var(--shf-page-width);height:auto;margin-inline:auto;container-type:inline-size;background:transparent;border:0;-webkit-backdrop-filter:none;backdrop-filter:none}
+.site-header .site-name{display:block;width:100%;height:auto;aspect-ratio:1080/236;margin:0;padding:0;background:url("assets/shf-top.png") center top/100% auto no-repeat;font-size:0;line-height:0;letter-spacing:0;color:transparent}
+.site-header .word-count{position:absolute;top:16.6cqw;left:auto;right:12cqw;max-width:48%;transform:translateY(-50%);padding:3px 6px;font-size:clamp(7px,1.2cqw,10px)}
+.site-header .toolbar{top:16.6cqw;right:2cqw;transform:translateY(-50%)}
+.site-header .toolbar .round{width:clamp(22px,4cqw,32px);height:clamp(22px,4cqw,32px)}
+#settingsPanel{top:calc(var(--shf-header-height) + 8px);max-height:calc(100dvh - var(--shf-header-height) - 24px)}
+body:not(.shf-home) main{min-height:calc(100vh - var(--shf-header-height))}
+.shf-chapter-entry main{animation:shf-chapter-arrival .65s ease both}
+@keyframes shf-chapter-arrival{from{opacity:0}to{opacity:1}}
+@media(max-width:640px){:root{--shf-page-width:100%;--shf-header-height:calc(100vw * 236 / 1080)}}
+@media(prefers-reduced-motion:reduce){.shf-chapter-entry main{animation:none}}

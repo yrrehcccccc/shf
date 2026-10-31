@@ -1,3 +1,12 @@
+// Complete the homepage handoff using the reader's existing theme.
+(() => {
+  try {
+    const entered = Number(sessionStorage.getItem('shf-chapter-entry'));
+    sessionStorage.removeItem('shf-chapter-entry');
+    const age = Date.now() - entered;
+    if (entered && age >= 0 && age < 15000 && !document.body.classList.contains('shf-home')) document.body.classList.add('shf-chapter-entry');
+  } catch {}
+})();
 const themes = [['黑白','#f8f7f3','#171714'],['暖棕','#eee8da','#332a22'],['灰黑','#dfe1dc','#252825'],['暖黑','#111923','#e9e3d7'],['咖啡','#ead6bd','#5a2923']];
 const fonts = {serif:'"Noto Serif SC","Songti SC","STSong",serif',sans:'"Noto Sans SC","PingFang SC","Hiragino Sans GB",sans-serif',light:'"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",sans-serif',system:'system-ui,"PingFang SC","Microsoft YaHei",sans-serif'};
 const root = document.documentElement;
