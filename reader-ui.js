@@ -16,6 +16,7 @@
 
 
   function decorateChats(container = document) {
+    if (window.ReaderChatLayout) return window.ReaderChatLayout.decorate(container);
     const bubbleSelector = '.rt-bubble,.sf-bubble';
     const chatSelector = '.rt-chat,.sf-chat';
     const isSpacer = node => node.nodeType === Node.ELEMENT_NODE && (
