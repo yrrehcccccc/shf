@@ -459,3 +459,6 @@ window.ReaderChatLayout = Object.freeze({ decorate:decorateReaderChats });
   }
   finish().catch(error=>console.warn('Reader presentation:',error));
 })();
+
+/* Shared return-to-home sticker. */
+(() => { if(document.querySelector('script[data-home-return-loader]'))return; const script=document.createElement('script');script.src='https://yrrehcccccc.github.io/me/assets/home-return.js?v=1';script.async=true;script.dataset.homeReturnLoader='true';document.head.append(script); })();
